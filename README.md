@@ -4,18 +4,19 @@
 欢迎关注
 CONLP是瞎取的名字，暂定。  
 ## CONLP v0.1 更新
-
 1.新增Double Array TrieTree的实现，用于存储词典（由于自己实现走了弯路，用的darts-java的实现，在此感谢，开源地址https://github.com/komiya-atsushi/darts-java）
-
 2.新增一阶HMM词性标注，目前仍然存在一些小问题，会慢慢更新
-
 3.新增词法分析器BasicLexicalAnalyzer，封装分词和词性标注
-
 4.其他：demo演示更新
-
-由于2014人民日报切分语料中存在不同类型的错误，花了大量时间在解析语料上，零国外字典树TrieTree的实现也花费了大量时间，因为几乎没有找到说字典树实现细节问题，所以写的时候没有考虑字典序，实现出来构建树超级慢。
+注：词性标注中英文对照参考
+https://blog.csdn.net/qq_37667364/article/details/82832925
+由于2014人民日报切分语料中存在不同类型的错误，花了大量时间在解析语料上，字典树TrieTree的实现也花费了大量时间，因为几乎没有找到说字典树实现细节问题，所以写的时候没有考虑字典序，实现出来构建树超级慢。
 另外自己实在是很忙，杂七杂八的事情很多，但业余时间几乎都奉献在这个项目上了。
 最近的方向：完善词性标注，考虑jieba分词的分词方案，二阶HMM平滑处理，CRF和无监督HMM。
+## 0更新
+**2018.9.22 19:23**
+最近太忙了，由于词性标注需要用到存储词的数据结构字典树，所以想实现这个，但是写完了才知道，这个需要按字典序排序才能构建树，不然性能非常非常差，哎，网上几乎没人提到这个，只有自己碰壁了。。暂时先用到darts-java的实现，后面再看。
+
 
 1.介绍
 ----
@@ -67,14 +68,48 @@ CONLP将HMM中的模型序列抽象为SequenceNode对象，SequenceNode描述了
     	}
     }
     
-   
+   **2.3 词性标注的使用**
+```
+public class POSTaggerDemo {
+	public static void main(String[] args) {
+		POSTagger tagger = StaticPOSTagger.getPOSTagger();
+		String s = "原标题：日媒拍到了现场罕见一幕" + 
+				"据日本新闻网（NNN）9月8日报道，日前，日本海上自卫队现役最大战舰之一的直升机航母“加贺”号在南海航行时，遭多艘中国海军战舰抵近跟踪监视。" ; 
+		Segmenter segmenter = StaticSegmenter.getSegmenter();
+		String[] seg = segmenter.predictAndReturnTerms(s);
+		String[] result = tagger.predictAndReturnStr(seg);
+		System.out.println(Arrays.toString(result));
+	}
+}
+```
+运行结果：
+
+```
+[原标题/n, ：/w, 日媒/d, 拍到/v, 了/ule, 现场/s, 罕见/a, 一幕/nz, 据/p, 日本/ns, 新闻网/n, （/w, NNN/x, ）/w, 9月/n, 8日/w, 报道/v, ，/w, 日前/t, ，/w, 日本/ns, 海上/s, 自卫队/nis, 现役/b, 最/d, 大/a, 战舰/n, 之/uzhi, 一/m, 的/ude1, 直升/nz, 机航母/n, “/w, 加贺/n, ”/w, 号/q, 在/p, 南海/ns, 航行/vi, 时/ng, ，/w, 遭多/m, 艘/q, 中国/ns, 海军/nnd, 战舰/n, 抵近/v, 跟踪/vn, 监视/vn, 。/w]
+```
+ **2.3 词法分析器的使用**
+ 
+
+```
+public class BasicLexicalAnalyzerDemo {
+	public static void main(String[] args) {
+		String str1 = "原标题：日媒拍到了现场罕见一幕" + 
+				"据日本新闻网（NNN）9月8日报道，日前，日本海上自卫队现役最大战舰之一的直升机航母“加贺”号在南海航行时，遭多艘中国海军战舰抵近跟踪监视。" ; 
+		String[] r2 = BasicLexicalAnalyzer.analyze(str1);
+		System.out.println(Arrays.toString(r2));
+	}
+}
+```
+结果同上
+  
 3.项目结构
 ------
 src #源码  
 ---com.outsider   
 ---------------demo #示例    
----------------common #通用的一些工具类   
+---------------common #通用的一些工具类或者算法   
 ---------------nlp #和nlp相关的一些实现   
+---------------constants 一些常量
 --------------model #模型的实现，主要的算法实现   
 data #分词训练语料   
 model #模型  
