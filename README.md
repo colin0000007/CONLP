@@ -5,9 +5,13 @@
 CONLP是瞎取的名字，暂定。  
 ## CONLP v0.1 更新
 1.新增Double Array TrieTree的实现，用于存储词典（由于自己实现走了弯路，用的darts-java的实现，在此感谢，开源地址https://github.com/komiya-atsushi/darts-java）
+
 2.新增一阶HMM词性标注，目前仍然存在一些小问题，会慢慢更新
+
 3.新增词法分析器BasicLexicalAnalyzer，封装分词和词性标注
+
 4.其他：demo演示更新
+
 注：词性标注中英文对照参考
 https://blog.csdn.net/qq_37667364/article/details/82832925
 由于2014人民日报切分语料中存在不同类型的错误，花了大量时间在解析语料上，字典树TrieTree的实现也花费了大量时间，因为几乎没有找到说字典树实现细节问题，所以写的时候没有考虑字典序，实现出来构建树超级慢。
