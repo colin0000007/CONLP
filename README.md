@@ -168,6 +168,6 @@ CONLP将HMM中的模型序列抽象为SequenceNode对象，SequenceNode描述了
 + 感谢HanLP作者hancks的开源项目和博客提供的极大帮助
 + 感谢参考的科研者的论文
 + 感谢各类博客文章的指点
-
++ 感谢crf4j，openlp等等优秀的开源项目
 
 
