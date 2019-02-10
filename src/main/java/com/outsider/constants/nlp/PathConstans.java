@@ -30,4 +30,9 @@ public class PathConstans {
 	public static final String CRFPP_SEGMENTER = "./model/crfpp/segmenter/crfSeg_ctb8_sku.m";
 	
 	public static final String DEPENDENCY_PARSER_MAXENT = "./model/dependencyParser/maxent_openlp.bin";
+	
+	public static final String FIRST_ORDER_HMM_NER = "./model/ner/hmm";
+	
+	public static final String SUPERVISED_CRF_NER = "./model/ner";
+
 }

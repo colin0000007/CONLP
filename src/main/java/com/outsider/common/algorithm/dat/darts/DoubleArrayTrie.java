@@ -389,7 +389,6 @@ public class DoubleArrayTrie<T> implements Serializable{
 
 	public void save(String fileName) throws IOException {
 		DataOutputStream out = null;
-		
 		//对base和check数组保存保存size+1的大小（这里的size并不是check数组的大小），不然可能出现Out Of Index
 		size = size + 1;
 		try {

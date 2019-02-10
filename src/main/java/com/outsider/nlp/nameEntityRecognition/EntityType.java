@@ -5,10 +5,10 @@ import java.util.Map;
 
 
 public class EntityType {
-	public static String PERSON_NAME = "P";
-	public static String LOCATION = "L";
-	public static String ORGANIZATION = "O"; 
-	public static String SINGLE = "W";
+	public static char PERSON_NAME = 'P';
+	public static char LOCATION = 'L';
+	public static char ORGANIZATION = 'O'; 
+	public static char SINGLE = 'W';
 	
 	public static Map<String, Integer> tag2id;
 	public static String[] id2tag;

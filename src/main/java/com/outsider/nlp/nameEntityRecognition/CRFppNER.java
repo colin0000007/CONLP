@@ -42,12 +42,12 @@ public class CRFppNER extends CrfppTrainer implements NER{
 	}
 
 	public static void main(String[] args) {
-		String modelFile = "./model/ner/crfner.m";
+		String modelFile = "./model/ner/crfppNER.m";
 		String templateFile = "./model/ner/nerTemplate";
-		String data = "D:\\nlp语料\\命名实体识别\\MSRA\\train1_crf_part1.txt";
+		String data = "D:\\nlp语料\\命名实体识别\\MSRA\\train1_crf.txt";
 		CRFppNER crFppNER = new CRFppNER();
 		//OOM错误
-		String[] option = new String[] {"-f","1"};
+		String[] option = new String[] {"-f","2"};
 		crFppNER.run(templateFile, data, modelFile, option);
 		//main2();
 	}

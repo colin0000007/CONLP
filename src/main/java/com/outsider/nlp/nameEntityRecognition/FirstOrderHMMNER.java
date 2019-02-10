@@ -2,20 +2,36 @@ package com.outsider.nlp.nameEntityRecognition;
 
 import java.util.List;
 
+import com.outsider.common.dataStructure.Table;
+import com.outsider.common.util.IOUtils;
+import com.outsider.model.data.NERCRFDataConverter;
 import com.outsider.model.hmm.FirstOrderGeneralHMM;
+import com.outsider.model.hmm.SequenceNode;
+import com.outsider.nlp.segmenter.SegmentationUtils;
 /**
  * 一阶HMM命名实体识别
- * 未实现
  * @author outsider
- * @deprecated
  *
  */
 public class FirstOrderHMMNER extends FirstOrderGeneralHMM implements NER{
+	
+	public FirstOrderHMMNER() {
+		super(EntityType.id2tag.length, 65536);
+	}
+
+	public FirstOrderHMMNER(int stateNum, int observationNum) {
+		super(stateNum, observationNum);
+	}
 
 	@Override
 	public List<Entity> extractEntity(String text) {
-		// TODO Auto-generated method stub
-		return null;
+		int[] xids = SegmentationUtils.str2int(text);
+		int[] yids = verterbi(xids);
+		String[] tags = new String[yids.length];
+		for(int i = 0; i < tags.length; i++) {
+			tags[i] = EntityType.id2tag[yids[i]];
+		}
+		return NERUtils.decode(text, tags);
 	}
 
 	@Override
@@ -35,5 +51,6 @@ public class FirstOrderHMMNER extends FirstOrderGeneralHMM implements NER{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }

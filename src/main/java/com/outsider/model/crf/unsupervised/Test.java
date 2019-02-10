@@ -1,5 +1,10 @@
 package com.outsider.model.crf.unsupervised;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,8 +14,14 @@ import com.outsider.model.hmm.SequenceNode;
 
 public class Test {
 	public static void main(String[] args) {
+		
+		try {
+			System.setErr(new PrintStream(new FileOutputStream("C:\\Users\\outsider\\Desktop\\iters.txt")));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		UnsupervisedCRF crf  = new UnsupervisedCRF(65536, 4);
-		String[] words = IOUtils.loadSegmentionCorpus("./data/segmentation/pku_training.splitBy2space.utf8", "utf-8", "  ");
+		String[] words = IOUtils.loadSegmentionCorpus("./data/segmentation/ctb6.train.seg.utf8.splitBy1space.txt", "utf-8", " ");
 		SegmentationDataConverter dataConverter = new SegmentationDataConverter();
 		List<SequenceNode> nodes = dataConverter.convert(words);
 		crf.train(nodes);

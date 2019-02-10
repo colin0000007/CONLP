@@ -3,15 +3,17 @@ package com.outsider.nlp.nameEntityRecognition;
 import java.util.List;
 
 import com.outsider.common.dataStructure.Table;
+import com.outsider.common.util.IOUtils;
 import com.outsider.model.crf.SupervisedCRF;
+import com.outsider.model.data.NERCRFDataConverter;
+import com.outsider.model.hmm.SequenceNode;
 import com.outsider.nlp.segmenter.SegmentationUtils;
 
 public class SupervisedCRFNER extends SupervisedCRF implements NER{
 
 	public SupervisedCRFNER() {
-		super();
+		super(65536,EntityType.id2tag.length);
 	}
-
 	public SupervisedCRFNER(int observationNum, int stateNum) {
 		super(observationNum, stateNum);
 	}
@@ -58,12 +60,12 @@ public class SupervisedCRFNER extends SupervisedCRF implements NER{
 	}
 	
 	public static void main(String[] args) {
-		String dataPath = "./data/ner/train1_crf.txt";
-		//String srcData = IOUtils.readTextWithLineCheckBreak(dataPath, "utf-8");
-		//Table table = Table.generateTable(srcData, "\t");
-		//NERCRFDataConverter converter = new NERCRFDataConverter(0, 1);
-		//List<SequenceNode> nodes = converter.convert(table);
-		SupervisedCRFNER ner = new SupervisedCRFNER(65536, EntityType.id2tag.length);
+		/*String dataPath = "./data/ner/train_crf.txt";
+		String srcData = IOUtils.readTextWithLineCheckBreak(dataPath, "utf-8");
+		Table table = Table.generateTable(srcData, "\t");
+		NERCRFDataConverter converter = new NERCRFDataConverter(0, 1);
+		List<SequenceNode> nodes = converter.convert(table);*/
+		SupervisedCRFNER ner = new SupervisedCRFNER();
 		//ner.train(nodes);
 		//ner.save("./model/ner", null);
 		long start = System.currentTimeMillis();
@@ -75,6 +77,20 @@ public class SupervisedCRFNER extends SupervisedCRF implements NER{
 		for(Entity entity : ents) {
 			System.out.println(entity);
 		}
+		
+		NERTaggerTest.score(ner);
+		/**
+		 * hmm:
+		 *  中国,L(0,1)
+			北京,L(16,17)
+			中国,L(19,20)
+			人民大会,O(25,28)
+			
+			precision:0.6044205,recall:0.5618832,F-score:0.5823762,errorRate:0.36773986
+			监督crf:
+			precision:0.6969159,recall:0.5081702,F-score:0.587762,errorRate:0.22099984
+
+		 */
 	}
 
 }

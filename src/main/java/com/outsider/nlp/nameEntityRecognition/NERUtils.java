@@ -3,6 +3,8 @@ package com.outsider.nlp.nameEntityRecognition;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.outsider.common.util.IOUtils;
+import com.outsider.common.util.StringUtils;
 import com.zhifac.crf4j.Tagger;
 
 public class NERUtils {
@@ -78,16 +80,69 @@ public class NERUtils {
 		return decode(text, predict);
 	}
 	
-	public static List<Entity> getSpecificEntityType(List<Entity> ens, String type){
+	public static List<Entity> getSpecificEntityType(List<Entity> ens, char type){
 		List<Entity> res = new ArrayList<>();
 		for(Entity entity : ens) {
-			if(entity.getEntityType().equals(type)) {
+			if(entity.getEntityType() == type) {
 				res.add(entity);
 			}
 		}
 		return res;
 	}
 	
+	/**
+	 * 从文本中读取实体，
+	 * 格式必须满足：
+	 * 例如：
+	 * 中国是一个法制国家。
+	 * 中国/ns 是一个法制国家。/o
+	 * @param datas 传入分割好的文本内容。以上面的例子就是 [中国/ns][是一个法制国家。/o]构成的数组
+	 * @return
+	 */
+	public static List<Entity> extractEntityFromText(String[] datas){
+		List<Entity> ens = new ArrayList<>();
+		// nr人名 ns地名 nt机构名
+		int start = 0,end = 0;
+		for(String ent : datas) {
+			ent = ent.trim();
+			int i = ent.lastIndexOf('/');
+			if(i == -1)
+				continue;
+			String entityC = ent.substring(0, i);
+			end += entityC.length();
+			start = end - entityC.length();
+			String type = ent.substring(i + 1).toLowerCase();
+			if(type.equals("o")) {
+				continue;
+			}
+			Entity entity = new Entity();
+			entity.setEntity(entityC);
+			entity.setStart(start);
+			entity.setEnd(end-1);
+			if(type.equals("nr")) {
+				entity.setEntityType(EntityType.PERSON_NAME);
+			} else if (type.equals("ns")) {
+				entity.setEntityType(EntityType.LOCATION);
+			} else if(type.equals("nt")) {
+				entity.setEntityType(EntityType.ORGANIZATION);
+			} else {
+				System.out.println("error...");
+			}
+			ens.add(entity);
+		}
+		return ens;
+	}
 	
-	
+	public static void main(String[] args) {
+		// nr人名 ns地名 nt机构名
+		String path = "./data/ner/testright.txt";
+		String[] datas = IOUtils.loadSegmentionCorpus(path, "utf-8", " ");
+		List<Entity> ens = extractEntityFromText(datas);
+		int count = 0;
+		for(Entity entity : ens) {
+			System.out.println(entity.getEntity()+"("+entity.getStart()+","+entity.getEnd()+")");
+			count++;
+			if(count > 100) break;
+		}
+	}
 }

@@ -2,17 +2,17 @@ package com.outsider.nlp.nameEntityRecognition;
 
 public class Entity {
 	//实体类别
-	private String entityType;
+	private char entityType;
 	//实体内容
 	private String entity;
 	//开始位置
 	private int start;
 	//结束位置
 	private int end;
-	public String getEntityType() {
+	public char getEntityType() {
 		return entityType;
 	}
-	public void setEntityType(String entityType) {
+	public void setEntityType(char entityType) {
 		this.entityType = entityType;
 	}
 	public String getEntity() {
@@ -37,6 +37,16 @@ public class Entity {
 	@Override
 	public String toString() {
 		return entity + ","+entityType +"("+start+","+end+")";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		Entity e2 = (Entity) obj;
+		if(this.entity.equals(e2.entity) && this.start == e2.start && this.end == e2.end
+				&& this.entityType == e2.entityType) {
+			return true;
+		}
+		return false;
 	}
 	
 }

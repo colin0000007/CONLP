@@ -12,6 +12,7 @@ import com.outsider.model.crf.CRF;
 import com.outsider.model.crf.FeatureFunction;
 import com.outsider.model.crf.FeatureTemplate;
 import com.outsider.model.hmm.SequenceNode;
+import com.outsider.model.metric.Metric;
 import com.outsider.nlp.segmenter.SegmentationPredictor;
 import com.outsider.nlp.segmenter.SegmentationUtils;
 import com.outsider.nlp.segmenter.SegmenterTest;
@@ -148,9 +149,9 @@ public class UnsupervisedCRF extends CRF implements SegmentationPredictor{
 		}
 		//初始化参数并计数总特征数
 		//降低特征总数增加，减少迭代次数
-		int allFeatureNum = 7;
+		int allFeatureNum = 20;
 		//改进的迭代尺度优化
-		IIS(1E-5, -1, allFeatureNum, x, y, featureTemplateCount, bigramFeatureCount);
+		IIS(1E-4, -1, allFeatureNum, x, y, featureTemplateCount, bigramFeatureCount);
 	}
 	/**
 	 * 初始化权重
@@ -259,16 +260,15 @@ public class UnsupervisedCRF extends CRF implements SegmentationPredictor{
 				for(int k = 0; k < stateNum; k++) {
 					oldWeights[j + offset][k] = transferProbabilityWeights[j][k];
 					transferProbabilityWeights[j][k] = transferProbabilityWeights[j][k] + delta[j+offset][k];
-					System.out.println("delta_bigram:"+delta[j+offset][k]);
 				}
 			}
 			
-			System.out.println("状态转移特征");
+			/*System.out.println("状态转移特征");
 			System.out.println("\tB\tM\tE\tS");
 			System.out.println("B\t"+Arrays.toString(transferProbabilityWeights[0]));
 			System.out.println("M\t"+Arrays.toString(transferProbabilityWeights[1]));
 			System.out.println("E\t"+Arrays.toString(transferProbabilityWeights[2]));
-			System.out.println("S\t"+Arrays.toString(transferProbabilityWeights[3]));
+			System.out.println("S\t"+Arrays.toString(transferProbabilityWeights[3]));*/
 			String[] test = new String[] {
 			"原标题：日媒拍到了现场罕见一幕，据日本新闻网（NNN）9月8日报道，日前，日本海上自卫队现役最大战舰之一的直升机航母“加贺”号在南海航行时，遭多艘中国海军战舰抵近跟踪监视。 ",
 			"HanLP是由一系列模型与算法组成的Java工具包，目标是普及自然语言处理在生产环境中的应用。",
@@ -286,9 +286,13 @@ public class UnsupervisedCRF extends CRF implements SegmentationPredictor{
 			for(String te : test) {
 				System.out.println(Arrays.toString(seg(te)));
 			}
-			SegmenterTest.score(this, "crf");
+			//SegmenterTest.score(this, "crf");
 			//检查是否达到精度要求
 			boolean isConvergent = isConvergent(epsilon, oldWeights);
+			int[] py = veterbi(x);
+			float accuracy = Metric.accuracyScore(py, y);
+			System.err.println(i);
+			System.err.println("acc:"+accuracy);
 			if(isConvergent) {
 				System.out.println("达到精度要求...");
 				break;
