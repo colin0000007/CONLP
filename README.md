@@ -174,3 +174,7 @@ CONLP将HMM中的模型序列抽象为SequenceNode对象，SequenceNode描述了
 + 感谢crf4j，openlp等等优秀的开源项目
 
 
+广告下。。。用我的AI大师码0415在滴滴云上购买GPU/vGPU/机器学习产品可享受9折优惠，点击www.didiyun.com前往滴滴云官网。
+GPU：https://www.didiyun.com/production/gpu.html
+VGPU：https://www.didiyun.com/production/vgpu.html
+机器学习工作室（DAI）：https://www.didiyun.com/production/dai.html
