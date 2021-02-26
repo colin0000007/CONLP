@@ -1,5 +1,5 @@
 # **CONLP**
-自己开发的一个自然语言处理java库，大多数算法由我自己实现。
+一个玩具级别的自然语言处理java库
 项目地址：https://github.com/colin0000007/CONLP
 
 
@@ -172,9 +172,3 @@ CONLP将HMM中的模型序列抽象为SequenceNode对象，SequenceNode描述了
 + 感谢参考的科研者的论文
 + 感谢各类博客文章的指点
 + 感谢crf4j，openlp等等优秀的开源项目
-
-
-广告下。。。用我的AI大师码0415在滴滴云上购买GPU/vGPU/机器学习产品可享受9折优惠，点击www.didiyun.com前往滴滴云官网。
-GPU：https://www.didiyun.com/production/gpu.html
-VGPU：https://www.didiyun.com/production/vgpu.html
-机器学习工作室（DAI）：https://www.didiyun.com/production/dai.html
